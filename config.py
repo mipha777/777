@@ -1,0 +1,58 @@
+# -*- coding: utf-8 -*-
+"""
+@Author   : shaozi
+@Version  : Python 3.12
+@Date     : 2025/7/29 20:34
+@Desc     : # 全局配置项（例如排行榜 URL、UA、路径等）
+"""
+import json
+
+# ------------------- 通用设置 -------------------
+PROJECT_NAME = "网易云爬虫"
+
+# ------------------- 网易云相关配置 -------------------
+base_url = "https://music.163.com"
+top_list_url = f"{base_url}/discover/toplist"
+# ------------------- Cookie 文件路径 -------------------
+import os
+CURRENT_DIR = os.path.dirname(__file__)
+COOKIE_PATH = os.path.abspath(os.path.join(CURRENT_DIR, "data", "cookies.json")) # cookie路径
+SONGS_PATH = os.path.abspath(os.path.join(CURRENT_DIR, "data", "songs.csv")) # 评论保存路径
+folder_path = os.path.abspath(os.path.join(CURRENT_DIR, "browser_data")) # 虚拟浏览器路径
+def back_cookie():
+    if os.path.exists(COOKIE_PATH):
+        with open(COOKIE_PATH, 'r', encoding='utf-8') as f:
+            cookies = json.load(f)
+        return cookies
+    else:
+        return False
+    # cookie_str = "; ".join([f"{k}={v}" for k, v in cookies.items()])
+# ------------------- 请求头 -------------------
+# from fake_useragent import UserAgent # 不好用 不如自建UA库
+ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'
+headers = {
+    'accept': '*/*',
+    'accept-language': 'zh-CN,zh;q=0.9,en;q=0.8',
+    'content-type': 'application/x-www-form-urlencoded',
+    'origin': 'https://music.163.com',
+    'priority': 'u=1, i',
+    'referer': 'https://music.163.com',
+    'sec-ch-ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Google Chrome";v="138"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"Windows"',
+    'sec-fetch-dest': 'empty',
+    'sec-fetch-mode': 'cors',
+    'sec-fetch-site': 'same-origin',
+    'user-agent': ua,
+    # 'cookie': '_ntes_nnid=b9929e671a0c5d00f0f0ef8475f86e73,1753785264977; _ntes_nuid=b9929e671a0c5d00f0f0ef8475f86e73; NMTID=00OGB0USzNOd0QxHEtAgpN8v2UW5q8AAAGYVb9osA; WEVNSM=1.0.0; WNMCID=pkalun.1753785266103.01.0; WM_TID=TYeaEZKe%2FsBBAEUBUALXkSJznu556ARO; sDeviceId=YD-%2BqhUC3P6%2F4NFQkRUEBfCkTJzjr8%2FCMDT; __snaker__id=Jq562J2MhXS7dlLc; ntes_kaola_ad=1; _iuqxldmzr_=32; __csrf=1e861b79128bec2470f3560f49e13f69; MUSIC_U=005FA2B823AEBB3589DB9F0BDA15A6428B83D4C6A8CA34806C76F6CE4482045190639FE9C3964348DFCABE00BC9E4A2BDB86D59FE3C429755480C8AE98003CECA31D428EA8C1130645920A6EC33E2252F480FFBEE69728D3B84DE093B8A5E410BCAD82A8B580A1C219E630565B021F444BD86BE6F9EAB7203F889766B777522A574015338A8028E4AC7088D5A74C0803B3B4BB9EECA8CCB388DDCD036822BC372BD951E8BA6C955C77D1E4738DA0C320CC2AC223B4BFAEE0B4E79DBDFA7BCEE72C57B5B65FF90ADD619490E2AF328709ED8B18C69A6620ACE76C5D1E0D43EB8BADAB6897A056801ECAFB3AA31029704A35D1FA5C13F669334B6593F3650CF76F79014A52C7992A6EC100A00AB7A111BC6B21FC382FD303C75F89B48E070D7EFF25B1A30B97CFB88747BCC527AB35DD6CFC382A4D6DAA8BDF88126B716626BBC7AC94291566CFFBABD6B8201BA182F35940D087241C2738121CFB824B318C74B8BD5D9A7F41B52FB04CA5DB0853722CC44489893CBCA2DAF314617F4B642E8629EC53E3CCA9F3943F1702D660F785A1316C; gdxidpyhxdE=ewI%2BlMUg8OK04xbxpTn9USXAdpZz%2B4RCj6r66%5CBLBl0vVcT%2FKJb8QumP3yEKTTQxqYrldUGYGRBVY0WN664iOWqGiL8rXCNRHIh4dYwjHm15TES6YeRM0bLx5CnOvpAc9NVzKzlIzZ7gwrYqJQ%5CnsIPtfNGaQZ4MAxWxSVozkdX9OT%2Fy%3A1753810833607; WM_NI=F76bF%2F0wNjdTM1Cg3%2F7x1NTxLeSnfV0ttZk0LUY1joTS8sOv3vovYP7lkMqo62pgcm62RE5N%2FebnbZWKaOwdk%2F7aFa%2BN8Hcq%2FNUZhhgZtOFIf2zDS2b7zvzcJrBCav4cQ2I%3D; WM_NIKE=9ca17ae2e6ffcda170e2e6eeaad450ab92af88b665a68a8aa6c14a938b8f87c77d8890ada8e47aa999fd9aed2af0fea7c3b92a86e9fa83c525f4a9828be7608fef8d88b225f5a8ffafd77490bb9d8fe55ef4acbcbbea3c908b97d2e965988df894ce7ef1aaa197dc5cf5b4a5aef465f6eec088e267f6ee9ea6b846edbbae8fe1529595afb0f670a9f1f982c56be992f8a9e27bed929bbbeb64a586bcb0c543a6eeb6a5d23aa2e9b697f9698aae8ea4e47ef8bd9fd3cc37e2a3; ntes_utid=tid._.H5VVJc8vUABERwVBEUeClWd2jus7HSlZ._.0.%2C.edd._.._.0; JSESSIONID-WYYY=Ty%2FDOzT%2Biqpv%2FBngR0aTk9p%2BZeINR5UjrYgbbAwY%2FyrlxMtW4nSPxKsYKKfXa67P2tZHjK%2F%2BGhSBYz0YYw%2BmV5tKZ8ZxPWFdgbY1a67Z2j8vsDQeO0%2FANMr9Jo8DPh9M0cVRqS8yP6rgX4jaDqP6nD%2FUpASneOS0BDC5tykPV%2FkGSDKI%3A1753894941222',
+}
+
+upsong_listid = '19723756' # 飙升榜
+hotsong_listid = '3778678' # 热歌榜
+newsong_listid = '3779629' # 新歌榜
+Original_listid = '2884035' # 原创榜
+# ------------------- 加密 JS 路径 -------------------
+ENCRYPT_JS_PATH = os.path.abspath(os.path.join(CURRENT_DIR, "encrypt", "encrypt.js"))
+
+# ------------------- 其他设置 -------------------
+SAVE_SONG_LIMIT = 100  # 最多保存前多少首歌
